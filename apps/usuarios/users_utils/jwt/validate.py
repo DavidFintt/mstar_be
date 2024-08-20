@@ -21,9 +21,9 @@ def jwt_required(params):
             )
             return params(*args, **kwargs)
         except ExpiredSignatureError:
-            raise Exception("Token expirado")
+            return jsonify({"error": "Token expirado"}), 401
         except InvalidTokenError:
-            raise Exception("Token inválido")
+            return jsonify({"error": "Token inválido"}), 401
         except Exception as e:
             raise Exception(str(e))
 

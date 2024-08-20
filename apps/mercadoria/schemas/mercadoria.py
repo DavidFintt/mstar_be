@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, pre_load, post_load
 from flask import current_app, session
 from apps.mercadoria.models import Mercadoria
 from datetime import date, datetime
@@ -15,12 +15,13 @@ class MercadoriaSchema(Schema):
     id = fields.Int(dump_only=True)
     nome = fields.Str(required=True)
     fabricante = fields.Str(required=True, load_only=True)
-    numero_registro = fields.Method("get_numero_registro", dump_only=True)
+    numero_registro = fields.Int() 
     descricao = fields.Str(required=True)
     tipo = fields.Int(required=False)
     estoque = fields.Method("get_estoque", dump_only=True)
 
-    def get_numero_registro(self, obj):
+    @post_load
+    def set_numero_registro(self, data, **kwargs):
         session = current_app.config["SESSION"]()
         count_mercadoria = session.query(Mercadoria).count()
         numero_registro = (
@@ -29,8 +30,8 @@ class MercadoriaSchema(Schema):
             + str(date.today().day)
             + str(count_mercadoria)
         )
-
-        return int(numero_registro)
+        data["numero_registro"] = int(numero_registro)
+        return data
 
     def get_estoque(self, obj):
         session = current_app.config["SESSION"]()

@@ -25,7 +25,7 @@ def login():
             token = generate_token(valid_user)
             return jsonify(token), 200
     except Exception as e:
-        return jsonify({"error:": str(e)}), 200
+        return jsonify({"error:": str(e)}), 500
 
 
 @user_blueprint.route("/users/refresh_token/", methods=["POST"])
@@ -39,8 +39,6 @@ def refresh_token():
 
 
 @user_blueprint.route("/users/register/", methods=["POST"])
-@jwt_required
-@is_admin
 def register_user():
     db_session = current_app.config["SESSION"]()
     json_input = request.get_json()
@@ -52,9 +50,9 @@ def register_user():
         db_session.add(user)
         db_session.commit()
     except ValidationError as e:
-        return Response(e.messages, status=500)
+        return jsonify(e.messages), 500
     except SQLAlchemyError as e:
-        return Response("Error", status=500)
+        return jsonify({"error": str(e)}), 500
     finally:
         db_session.close()
-    return Response(user, status=200)
+    return jsonify({"message": "Usuario criado com sucesso"}), 200

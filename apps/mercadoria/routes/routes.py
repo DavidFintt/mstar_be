@@ -159,3 +159,24 @@ def return_mercadoria():
             db_session.close()
     except Exception as e:
         return jsonify({"error:": str(e)}), 500
+
+
+@mercadoria_blueprint.route("/mercadoria/tipo/return/", methods=["GET"])
+@jwt_required
+def tipo_mercadoria_return():
+    try:
+        db_session = current_app.config["SESSION"]()
+        tipo_mercadoria_schema = TipoMercadoriaSchema()
+
+        try:
+            tipo = db_session.query(TipoMercadoria).all()
+            result = tipo_mercadoria_schema.dump(tipo, many=True)
+            return jsonify(result), 200
+        except ValidationError as e:
+            return jsonify(e.messages), 500
+        except SQLAlchemyError as e:
+            return jsonify({"error:": str(e)}), 500
+        finally:
+            db_session.close()
+    except Exception as e:
+        return jsonify({"error:": str(e)}), 500
