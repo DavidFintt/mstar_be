@@ -48,22 +48,36 @@ class MercadoriaSchema(Schema):
 class EntradaMercadoriaSchema(Schema):
     id = fields.Int(dump_only=True)
     data = fields.Method("get_data_atual", dump_only=True)
+    nome_mercadoria = fields.Method("get_nome_mercadoria", dump_only=True)
     mercadoria = fields.Int(required=True)
     unidade = fields.Int(required=True)
     quantidade = fields.Int(required=True)
+    usuario = fields.Int(required=False)
 
     def get_data_atual(self, obj):
         return datetime.now()
+    
+    def get_nome_mercadoria(self, obj):
+        mercadoria = current_app.config["SESSION"]().query(Mercadoria).filter(Mercadoria.id == obj.mercadoria).first()
+        return mercadoria.nome
+
 
 
 class SaidaMercadoriaSchema(Schema):
     id = fields.Int(dump_only=True)
     data = fields.Method("get_data_atual", dump_only=True)
+    nome_mercadoria = fields.Method("get_nome_mercadoria", dump_only=True)
     mercadoria = fields.Int(required=True)
     unidade_saida = fields.Int(required=True)
     unidade_destino = fields.Int(required=True)
     entrega = fields.Int(required=False)
     quantidade = fields.Int(required=True)
+    usuario = fields.Int(required=False)
 
     def get_data_atual(self, obj):
         return datetime.now()
+    
+    def get_nome_mercadoria(self, obj):
+        mercadoria = current_app.config["SESSION"]().query(Mercadoria).filter(Mercadoria.id == obj.mercadoria).first()
+        return mercadoria.nome
+    

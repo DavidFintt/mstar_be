@@ -29,5 +29,7 @@ if __name__ == "__main__":
     session_factory = sessionmaker(bind=engine)
     Session = scoped_session(session_factory)
     app.config["SESSION"] = Session
+    app.config["SESSION_COOKIE_SAMESITE"] = "None"
+    app.config["SESSION_COOKIE_SECURE"] = True
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
     app.run(debug=True)
