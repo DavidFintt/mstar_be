@@ -11,7 +11,6 @@ unidade_blueprint = Blueprint("unidade", __name__)
 
 @unidade_blueprint.route("/unidade/register/", methods=["POST"])
 @jwt_required
-@is_admin
 def register_unidade():
     try:
         session = current_app.config["SESSION"]()
@@ -36,7 +35,6 @@ def register_unidade():
 
 @unidade_blueprint.route("/unidade/return/", methods=["GET"])
 @jwt_required
-@is_admin
 def return_unidade():
     try:
         session = current_app.config["SESSION"]()

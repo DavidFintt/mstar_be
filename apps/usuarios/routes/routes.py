@@ -35,7 +35,7 @@ def refresh_token():
         new_token = refresh(token)
         return jsonify(new_token), 200
     except Exception as e:
-        return jsonify({"error:": str(e)}), 200
+        return jsonify({"error:": str(e)}), 401
 
 
 @user_blueprint.route("/users/register/", methods=["POST"])

@@ -7,6 +7,7 @@ from apps.usuarios.routes.routes import user_blueprint
 from apps.mercadoria.routes.routes import mercadoria_blueprint
 from apps.cliente.routes.routes import cliente_blueprint
 from apps.unidades.routes.routes import unidade_blueprint
+from apps.relatorios.routes.routes import relatorio_blueprint
 
 from settings.cors import configure_cors
 
@@ -23,6 +24,7 @@ app.register_blueprint(user_blueprint)
 app.register_blueprint(mercadoria_blueprint)
 app.register_blueprint(cliente_blueprint)
 app.register_blueprint(unidade_blueprint)
+app.register_blueprint(relatorio_blueprint)
 
 if __name__ == "__main__":
     engine = db_connect()
@@ -32,4 +34,4 @@ if __name__ == "__main__":
     app.config["SESSION_COOKIE_SAMESITE"] = "None"
     app.config["SESSION_COOKIE_SECURE"] = True
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
-    app.run(debug=True)
+    app.run(debug=False)
